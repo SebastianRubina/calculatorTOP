@@ -3,7 +3,10 @@ let firstNumber;
 let secondNumber;
 let operator;
 let result;
+let usersInput = '';
 
+let fart = document.createElement("audio");
+fart.src = "grossology-fard.mp3";
 let screen = document.querySelector('.screen');
 
 // Buttons
@@ -27,6 +30,8 @@ let button9 = document.querySelector('.button9');
 button9.addEventListener('click', setNumbers);
 let button0 = document.querySelector('.button0');
 button0.addEventListener('click', setNumbers);
+let buttonPoint = document.querySelector('.button-point');
+buttonPoint.addEventListener('click', setNumbers);
 
 let buttonAdd = document.querySelector('.button-add');
 buttonAdd.addEventListener('click', setOperator);
@@ -48,29 +53,51 @@ function ac() {
   secondNumber = undefined;
   operator = undefined;
   screen.innerHTML = 0;
+  userInput.innerHTML = '';
 }
 
 function setNumbers(e) {
-  if (firstNumber == undefined) {
-    firstNumber = parseInt(e.target.innerHTML);
+  if (e.target.innerHTML == '.') {
+    if (operator == undefined) {
+      firstNumber += '' + e.target.innerHTML;
+    } else if (secondNumber != undefined) {
+      secondNumber += '' + e.target.innerHTML;
+    }
+  } else if (firstNumber == undefined) {
+    firstNumber = parseFloat(e.target.innerHTML);
     console.log(firstNumber);
   } else if (operator == undefined) {
+    console.log(e.target.innerHTML);
     firstNumber += '' + e.target.innerHTML;
-    firstNumber = parseInt(firstNumber);
+    firstNumber = parseFloat(firstNumber);
     console.log(firstNumber);
   } else if (secondNumber == undefined) {
-    secondNumber = parseInt(e.target.innerHTML);
+    secondNumber = parseFloat(e.target.innerHTML);
     console.log(secondNumber)
   } else {
     secondNumber += '' + e.target.innerHTML;
-    secondNumber = parseInt(secondNumber);
+    secondNumber = parseFloat(secondNumber);
     console.log(secondNumber);
   }
+  userInput.innerHTML += e.target.innerHTML;
 }
 
 function setOperator(e) {
-  operator = e.target.innerHTML;
-  console.log(operator);
+
+  if (operator == undefined) {
+    operator = e.target.innerHTML;
+    console.log(operator);
+    userInput.innerHTML += ' ' + operator + ' ';
+  } else {
+    operator = e.target.innerHTML;
+    userInput.innerHTML = userInput.innerHTML.slice(0, -2);
+    userInput.innerHTML += operator + ' ';
+    console.log(userInput.innerHTML);
+  }
+
+  if (secondNumber != undefined) {
+    operate(operator, firstNumber, secondNumber);
+  }
 }
 
 // Operation functions
@@ -113,6 +140,7 @@ function operate(operatorSign, a, b) {
   firstNumber = result;
   secondNumber = undefined;
   operator = undefined;
+  fart.play();
   return result;
 }
 
@@ -121,3 +149,4 @@ function display(operate) {
   displayValue = operate;
   return displayValue;
 }
+let userInput = document.querySelector('.user-input');
